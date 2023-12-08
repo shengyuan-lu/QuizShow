@@ -1,0 +1,155 @@
+<div
+    *ngIf="
+        quizQuestions.length > 0 && currentQuestionIndex < quizQuestions.length
+    "
+    class="container mt-4"
+>
+    <div class="card">
+        <div class="card-header">
+            <h2>
+                Quiz {{ currentQuestionIndex + 1 }}/{{ quizQuestions.length }}
+            </h2>
+
+            <h5 class="font-weight-bold text-success">
+                Total Cash: {{ getCurrentMoney() }}
+            </h5>
+        </div>
+        <div class="card-body">
+            <h4 *ngIf="isCorrect === null" class="mb-2">
+                {{ quizQuestions[currentQuestionIndex].getQuestionText() }}
+            </h4>
+
+            <ul *ngIf="isCorrect === null" class="list-group">
+                <li
+                    class="list-group-item"
+                    *ngFor="
+                        let option of quizQuestions[
+                            currentQuestionIndex
+                        ].getOptions();
+                        let i = index
+                    "
+                >
+                    <label class="form-check-label">
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            name="answer"
+                            [checked]="userAnswerIndex === i"
+                            (change)="userAnswerIndex = i"
+                        />
+                        {{ option }}
+                    </label>
+                </li>
+            </ul>
+
+            <div *ngIf="isCorrect === null" class="mt-3">
+                <button class="btn btn-info" (click)="toggleHint()">
+                    {{ showHint ? "Hide Hint" : "Show Hint" }}
+                </button>
+                <p
+                    *ngIf="
+                        showHint &&
+                        quizQuestions[currentQuestionIndex].getHint()
+                    "
+                    class="text-info mt-2"
+                >
+                    <b
+                        >Hint:
+                        {{ quizQuestions[currentQuestionIndex].getHint() }}</b
+                    >
+                </p>
+            </div>
+
+            <hr *ngIf="isCorrect === null" />
+
+            <p *ngIf="isCorrect === null">
+                Award for this question:
+                <b class="text-success"
+                    >${{
+                        quizQuestions[currentQuestionIndex].getMoneyAmount()
+                    }}</b
+                >
+            </p>
+
+            <div *ngIf="isCorrect === null" class="mt-3">
+                <button class="btn btn-primary" (click)="submitAnswer()">
+                    Submit Answer
+                </button>
+            </div>
+
+            <div *ngIf="isCorrect !== null" class="mt-3 mb-3">
+                <div *ngIf="isCorrect">
+                    <p class="text-success mt-2">
+                        <b>Correct! </b>
+                    </p>
+                    <p>
+                        {{
+                            quizQuestions[
+                                currentQuestionIndex
+                            ].getCorrectReason()
+                        }}
+                    </p>
+                    <p>
+                        <b>
+                            You received ${{
+                                quizQuestions[
+                                    currentQuestionIndex
+                                ].getMoneyAmount()
+                            }}.
+                        </b>
+                    </p>
+                </div>
+
+                <div *ngIf="!isCorrect">
+                    <p class="text-danger mt-2">
+                        <b>Incorrect!</b>
+                    </p>
+
+                    <p>
+                        The correct answer is
+                        {{
+                            quizQuestions[currentQuestionIndex].getOptions()[
+                                quizQuestions[
+                                    currentQuestionIndex
+                                ].getCorrectOptionIndex()
+                            ] + ". "
+                        }}
+                        {{
+                            quizQuestions[
+                                currentQuestionIndex
+                            ].getCorrectReason()
+                        }}
+                    </p>
+                </div>
+
+                <button
+                    class="btn btn-primary"
+                    (click)="loadNextQuestion(false)"
+                >
+                    Next Question
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div
+    *ngIf="
+        !(
+            quizQuestions.length > 0 &&
+            currentQuestionIndex < quizQuestions.length
+        )
+    "
+    class="container mt-4"
+>
+    <h2 class="text-primary">Congratulations!</h2>
+    <h5>
+        You won
+        <b class="font-weight-bold text-success">{{ getCurrentMoney() }}</b
+        >.
+    </h5>
+
+    <button class="btn btn-primary mt-4" (click)="restartQuiz()">
+        Restart Quiz
+    </button>
+</div>

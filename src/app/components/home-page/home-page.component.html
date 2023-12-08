@@ -1,0 +1,91 @@
+<nav class="navbar navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="#"><b>QuizShow - Gesture Enabled</b></a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <app-quiz></app-quiz>
+        </div>
+        <div class="col-md-4">
+            <div class="container mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Gesture Control</h3>
+                        <h5 class="text-primary">Gesture: {{ gesture }}</h5>
+                        <h5 class="text-primary">
+                            Action: {{ actionFromGesture(gesture) }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <app-handtracker
+                            (onPrediction)="prediction($event)"
+                        ></app-handtracker>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Instructions</h3>
+                        <h5 class="text-secondary">
+                            Illegal Actions Will Be Ignored
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            <b
+                                >Basic Gestures ({{
+                                    Object.keys(basicGestureToAction).length
+                                }})</b
+                            >
+                        </p>
+                        <ul class="list-group">
+                            <li
+                                *ngFor="
+                                    let keyPair of basicGestureToAction
+                                        | keyvalue
+                                "
+                                class="list-group-item"
+                            >
+                                <div>
+                                    <p class="text-secondary">
+                                        <b>{{ keyPair.key }}</b>
+                                    </p>
+                                    <p>{{ keyPair.value }}</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <p class="mt-3">
+                            <b
+                                >Custom Gestures ({{
+                                    Object.keys(customGestureToAction).length
+                                }})</b
+                            >
+                        </p>
+                        <ul class="list-group">
+                            <li
+                                *ngFor="
+                                    let keyPair of customGestureToAction
+                                        | keyvalue
+                                "
+                                class="list-group-item"
+                            >
+                                <div>
+                                    <p class="text-secondary">
+                                        <b>{{ keyPair.key }}</b>
+                                    </p>
+                                    <p class="text-danger">
+                                        {{ keyPair.value }}
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
